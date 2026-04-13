@@ -1,0 +1,29 @@
+{
+  "name": "messager-server",
+  "version": "1.0.0",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Sandeepnegi686/messanger-clone.git"
+  },
+  "author": "Sandeep Negi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sandeepnegi686/messanger-clone/issues"
+  },
+  "homepage": "https://github.com/Sandeepnegi686/messanger-clone#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^8.23.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}
