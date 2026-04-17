@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "./inputs/Input";
 import Button from "./Button";
+import AuthSocialButton from "./AuthSocialButton";
+import { BsGithub, BsGoogle } from "react-icons/bs";
 
 type Varient = "LOGIN" | "REGISTER";
 
@@ -43,8 +45,8 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+    <div className="mt-8 mx-auto w-[90%] md:w-full sm:max-w-md">
+      <div className="bg-white px-4 py-8 shadow rounded-lg sm:px-10">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {varient === "REGISTER" && (
             <Input
@@ -53,6 +55,7 @@ export default function AuthForm() {
               register={register}
               type="text"
               errors={errors}
+              disabled={isLoading}
             />
           )}
           <Input
@@ -61,6 +64,7 @@ export default function AuthForm() {
             register={register}
             type="email"
             errors={errors}
+            disabled={isLoading}
           />
           <Input
             id="password"
@@ -68,6 +72,7 @@ export default function AuthForm() {
             register={register}
             type="password"
             errors={errors}
+            disabled={isLoading}
           />
           <div>
             <Button disabled={isLoading} fullWidth type="submit">
@@ -77,13 +82,35 @@ export default function AuthForm() {
         </form>
         <div className="mt-6">
           <div className="relative">
-            <div className="absolute inset-0 flex items-center">
+            <div className="inset-0 flex items-center justify-center">
               <div className="w-full border-t border-gray-300"></div>
-              <div className="relative flex justify-center text-sm">
+              <div className="absolute flex justify-center text-sm">
                 <span className="bg-white px-2 text-gray-500">
                   Or continue with
                 </span>
               </div>
+            </div>
+
+            <div className="mt-6 flex gap-2">
+              <AuthSocialButton
+                icon={BsGithub}
+                onClick={() => socialAction("github")}
+              />
+              <AuthSocialButton
+                icon={BsGoogle}
+                onClick={() => socialAction("google")}
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
+            <div>
+              {varient === "LOGIN"
+                ? "New to Messenger?"
+                : "Already have an account?"}
+            </div>
+            <div onClick={toggleVarient} className="underline cursor-pointer">
+              {varient === "LOGIN" ? "Create an account" : "Login"}
             </div>
           </div>
         </div>
