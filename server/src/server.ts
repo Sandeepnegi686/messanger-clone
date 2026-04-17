@@ -5,6 +5,7 @@ import cors from "cors";
 
 // import connectDB from "./config/connectDB.ts";
 import connectDB from "./config/connectDB";
+import authRouter from "./Routes/auth.route";
 // import authRoute from "./Routes/auth";
 // import userRoute from "./Routes/user";
 // import listRoute from "./Routes/listing";
@@ -32,7 +33,7 @@ app.use(function (req, res, next) {
 
 app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 
-// app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/", authRouter);
 // app.use("/api/v1/user", userRoute);
 // app.use("/api/v1/listing", listRoute);
 // app.use("/api/v1/reservation", authenticateUser, reservationRoute);
