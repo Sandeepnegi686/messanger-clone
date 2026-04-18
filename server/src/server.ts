@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
 
 app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 
-app.use("/api/v1/", authRouter);
+app.use("/api/v1", authRouter);
 // app.use("/api/v1/user", userRoute);
 // app.use("/api/v1/listing", listRoute);
 // app.use("/api/v1/reservation", authenticateUser, reservationRoute);

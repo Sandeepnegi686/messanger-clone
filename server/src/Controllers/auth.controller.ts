@@ -2,6 +2,7 @@ import { CookieOptions, NextFunction, Request, Response } from "express";
 import { loginValidation, validateRegister } from "../lib/validate";
 import UserModel from "../Models/user.model";
 import jwt from "jsonwebtoken";
+import { generateToken } from "../config/generateToken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
@@ -39,17 +40,7 @@ async function signUp(
       email,
     });
 
-    const data = {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-    };
-
-    const token = jwt.sign(data, JWT_SECRET, {
-      expiresIn: 60 * 60 * 24,
-    });
-
-    res.cookie("access-token", token, cookieOptions);
+    await generateToken(user._id.toString(), res);
 
     return res.status(201).json({
       success: true,
