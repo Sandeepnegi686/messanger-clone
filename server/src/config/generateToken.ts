@@ -27,7 +27,7 @@ async function generateToken(id: string, res: Response) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  const csrfToken = await generateCSRFToken(id, res);
+  await generateCSRFToken(id, res);
 
   return { accessToken, refreshToken };
 }
