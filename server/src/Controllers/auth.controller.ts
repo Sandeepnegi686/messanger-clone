@@ -1,18 +1,7 @@
 import { CookieOptions, NextFunction, Request, Response } from "express";
 import { loginValidation, validateRegister } from "../lib/validate";
 import UserModel from "../Models/user.model";
-import jwt from "jsonwebtoken";
 import { generateToken } from "../config/generateToken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "";
-
-const cookieOptions: CookieOptions = {
-  maxAge: 1000 * 60 * 60 * 24,
-  httpOnly: true,
-  secure: true,
-  sameSite: "none" as const,
-  path: "/",
-};
 
 async function signUp(
   req: Request<{}, {}, { name: string; email: string; password: string }, {}>,
@@ -24,7 +13,7 @@ async function signUp(
     if (error)
       return res
         .status(400)
-        .json({ success: false, message: error.details[0].message });
+        .json({ success: false, message: error?.details[0].message });
     const { name, password, email } = req.body;
 
     const existingUser = await UserModel.findOne({ email });
@@ -81,24 +70,11 @@ async function login(
       .json({ success: false, message: "Password incorrect" });
   }
 
-  const userObject = existingUser.toObject();
-  const { hashedPassword: pass, ...user } = userObject;
+  await generateToken(existingUser._id.toString(), res);
 
-  const data = {
-    _id: existingUser._id,
-    name: existingUser.name,
-    email: existingUser.email,
-  };
-
-  const token = jwt.sign(data, JWT_SECRET, {
-    expiresIn: 60 * 60 * 24,
-  });
-
-  res.cookie("access-token", token, cookieOptions);
   return res.status(200).json({
     success: true,
     message: "Logged in",
-    user,
   });
 }
 
