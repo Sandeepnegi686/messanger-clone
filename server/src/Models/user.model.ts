@@ -1,8 +1,10 @@
 import argon2 from "argon2";
-import { Model, model, Schema } from "mongoose";
+// import { Types } from "joi";
+import { Model, model, Schema, Types } from "mongoose";
 import validator from "validator";
 
-interface UserType {
+export interface UserType {
+  _id?: Types.ObjectId | string;
   name: string;
   email: string;
   emailVerified?: boolean;
@@ -48,7 +50,7 @@ const schema = new Schema<UserType, UserModelType, IUserMethods>(
     },
     hashedPassword: {
       type: String,
-      default: "",
+      select: false,
     },
   },
   { timestamps: true },

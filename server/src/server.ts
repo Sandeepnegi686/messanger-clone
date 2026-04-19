@@ -6,6 +6,7 @@ import cors from "cors";
 // import connectDB from "./config/connectDB.ts";
 import connectDB from "./config/connectDB";
 import authRouter from "./Routes/auth.route";
+import { errorHandler } from "./middleware/errorHandler";
 // import authRoute from "./Routes/auth";
 // import userRoute from "./Routes/user";
 // import listRoute from "./Routes/listing";
@@ -38,7 +39,7 @@ app.use("/api/v1", authRouter);
 // app.use("/api/v1/listing", listRoute);
 // app.use("/api/v1/reservation", authenticateUser, reservationRoute);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 function startServer() {
   try {

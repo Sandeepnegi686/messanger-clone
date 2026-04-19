@@ -18,7 +18,6 @@ function errorHandler(
   console.log(err);
   if (err instanceof mongoose.Error.ValidationError) {
     const errors = Object.values(err.errors).map((el: any) => el.message);
-
     return res.status(400).json({
       success: false,
       message: errors[0],
@@ -27,7 +26,7 @@ function errorHandler(
 
   return res
     .status(err.statusCode || 500)
-    .json({ success: false, message: err.message });
+    .json({ success: false, message: "Something went wront at server side." });
 }
 
 export { APIError, errorHandler };
