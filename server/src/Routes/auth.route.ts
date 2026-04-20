@@ -41,30 +41,12 @@ router.get(
     try {
       const user = req.user as any;
       await generateToken(user._id.toString(), res);
-      return res.redirect(`${CLIENT_URL}/auth-successfull`);
+      return res.redirect(`${CLIENT_URL}/users`);
     } catch (error) {
       console.error(error);
-      return res.redirect(`${CLIENT_URL}/login`);
+      return res.redirect(CLIENT_URL);
     }
   },
 );
-
-// router.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", {
-//     failureRedirect: `${CLIENT_URL}`,
-//     session: false,
-//   }),
-//   (req: Request, res: Response) => {
-//     // Successful authentication, redirect home.
-//     const user = req.user as any;
-//     const data = { _id: user._id, name: user.name, email: user.email };
-//     const token = jwt.sign(data, JWT_SECRET, {
-//       expiresIn: 60 * 60 * 24, // 1 day
-//     });
-//     const url = `${CLIENT_URL}/auth-successfull?access-token=${token}`;
-//     return res.redirect(url);
-//   },
-// );
 
 export default router;

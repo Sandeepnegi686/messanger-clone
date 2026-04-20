@@ -1,7 +1,10 @@
 import Image from "next/image";
 import AuthForm from "./_components/AuthForm";
+import getCurrentUser from "./_actions/getCurrentUser";
 
-export default function Home() {
+export default async function Home() {
+  const currentUser = await getCurrentUser();
+  console.log(currentUser);
   return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -17,7 +20,7 @@ export default function Home() {
         </h2>
       </div>
       {/* AUTH FORM */}
-      <AuthForm />
+      <AuthForm currentUser={currentUser} />
     </div>
   );
 }

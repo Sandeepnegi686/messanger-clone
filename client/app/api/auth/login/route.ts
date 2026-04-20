@@ -5,16 +5,22 @@ export async function POST(req: Request) {
   const response = await fetch(`${BASE_API_URL}/api/v1/auth/login`, {
     body: JSON.stringify(body),
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
   });
   const data = await response.json();
-  const cookies = response.headers.get("set-cookie");
+  const cookie = response.headers.get("set-cookie");
+
+  if (!response.ok) {
+    return Response.json(data, {
+      status: response.status,
+    });
+  }
+
   return Response.json(data, {
     status: response.status,
     headers: {
-      "Set-cookie": cookies || "",
+      "Set-Cookie": cookie || "",
       "Content-Type": "application/json",
     },
   });

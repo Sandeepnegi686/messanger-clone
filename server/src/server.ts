@@ -15,6 +15,7 @@ import { errorHandler } from "./middleware/errorHandler";
 require("dotenv").config();
 // import passport from "./Config/passport";
 // import authenticateUser from "./middleware/authMiddleware";
+import passport from "./config/passport";
 
 const PORT = process.env.PORT || 80;
 const DB_URL = process.env.DB_URL || "";
@@ -24,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: process.env.CLIENT_URL!, credentials: true }));
 app.use(helmet());
-// app.use(passport.initialize());
+app.use(passport.initialize());
 
 //request logger
 app.use(function (req, res, next) {

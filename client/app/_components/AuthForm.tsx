@@ -1,16 +1,29 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "./inputs/Input";
 import Button from "./Button";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGoogle } from "react-icons/bs";
 import BASE_API_URL from "../lib/api";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { UserType } from "../_types/UserType";
 
 type Varient = "LOGIN" | "REGISTER";
 
-export default function AuthForm() {
+export default function AuthForm({
+  currentUser,
+}: {
+  currentUser: UserType | null;
+}) {
+  const router = useRouter();
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/users");
+    }
+  }, [currentUser, router]);
   const [varient, setVarient] = useState<Varient>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,24 +43,49 @@ export default function AuthForm() {
     defaultValues: { name: "", email: "", password: "" },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
-    if (varient === "REGISTER") {
-      //Register
-    }
-    if (varient === "LOGIN") {
-      //Sign In
+    try {
+      if (varient === "REGISTER") {
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(data),
+        });
+        const fetchedData = await res.json();
+        if (fetchedData.success) {
+          toast.success(fetchedData.message);
+          router.push("/users");
+        } else {
+          toast.error(fetchedData.message);
+        }
+      }
+      if (varient === "LOGIN") {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({ email: data.email, password: data.password }),
+        });
+        const fetchedData = await res.json();
+        if (fetchedData.success) {
+          toast.success(fetchedData.message);
+          router.push("/users");
+        } else {
+          toast.error(fetchedData.message);
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // const socialAction = (action: string) => {
-  //   setIsLoading(true);
-  //   //Social SIgn In
-  // };
 
   async function googleLogin() {
     window.location.href = `${BASE_API_URL}/api/v1/auth/google`;
   }
+
+  useEffect(() => {}, []);
 
   return (
     <div className="mt-8 mx-auto w-[90%] md:w-full sm:max-w-md">

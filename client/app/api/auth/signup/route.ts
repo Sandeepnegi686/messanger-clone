@@ -8,6 +8,7 @@ export async function POST(req: Request) {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
   const data = await response.json();
   const cookies = response.headers.get("set-cookie");

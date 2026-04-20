@@ -36,7 +36,6 @@ async function login(
   res: Response,
 ) {
   const { error } = loginValidation(req.body);
-
   if (error) throw new APIError(error?.details[0]?.message, 400);
 
   const { email, password } = req?.body;

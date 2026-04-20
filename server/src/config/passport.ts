@@ -21,7 +21,7 @@ passport.use(
       try {
         let user = await UserModel.findOne({
           email,
-        }).lean();
+        });
         if (!user) {
           user = await UserModel.create({
             name: profile.displayName,
@@ -29,7 +29,13 @@ passport.use(
             email: email,
             emailVerified: true,
           });
+        } else {
+          if (!user.emailVerified) {
+            user.emailVerified = true;
+            await user.save();
+          }
         }
+
         return cb(null, user);
       } catch (error) {
         console.log(error);

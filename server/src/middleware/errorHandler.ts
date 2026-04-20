@@ -24,9 +24,10 @@ function errorHandler(
     });
   }
 
-  return res
-    .status(err.statusCode || 500)
-    .json({ success: false, message: "Something went wront at server side." });
+  return res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message ?? "Something went wront at server side.",
+  });
 }
 
 export { APIError, errorHandler };
