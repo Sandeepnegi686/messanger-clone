@@ -5,7 +5,8 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "./inputs/Input";
 import Button from "./Button";
 import AuthSocialButton from "./AuthSocialButton";
-import { BsGithub, BsGoogle } from "react-icons/bs";
+import { BsGoogle } from "react-icons/bs";
+import BASE_API_URL from "../lib/api";
 
 type Varient = "LOGIN" | "REGISTER";
 
@@ -39,10 +40,14 @@ export default function AuthForm() {
     }
   };
 
-  const socialAction = (action: string) => {
-    setIsLoading(true);
-    //Social SIgn In
-  };
+  // const socialAction = (action: string) => {
+  //   setIsLoading(true);
+  //   //Social SIgn In
+  // };
+
+  async function googleLogin() {
+    window.location.href = `${BASE_API_URL}/api/v1/auth/google`;
+  }
 
   return (
     <div className="mt-8 mx-auto w-[90%] md:w-full sm:max-w-md">
@@ -92,14 +97,7 @@ export default function AuthForm() {
             </div>
 
             <div className="mt-6 flex gap-2">
-              <AuthSocialButton
-                icon={BsGithub}
-                onClick={() => socialAction("github")}
-              />
-              <AuthSocialButton
-                icon={BsGoogle}
-                onClick={() => socialAction("google")}
-              />
+              <AuthSocialButton icon={BsGoogle} onClick={googleLogin} />
             </div>
           </div>
 
