@@ -10,6 +10,7 @@ import BASE_API_URL from "../lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { UserType } from "../_types/UserType";
+import { setAccessToken } from "../lib/accessToken";
 
 type Varient = "LOGIN" | "REGISTER";
 
@@ -56,6 +57,7 @@ export default function AuthForm({
         if (fetchedData.success) {
           toast.success(fetchedData.message);
           router.push("/users");
+          setAccessToken(fetchedData.accessToken);
         } else {
           toast.error(fetchedData.message);
         }
@@ -70,6 +72,7 @@ export default function AuthForm({
         if (fetchedData.success) {
           toast.success(fetchedData.message);
           router.push("/users");
+          setAccessToken(fetchedData.accessToken);
         } else {
           toast.error(fetchedData.message);
         }

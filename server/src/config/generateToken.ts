@@ -13,12 +13,12 @@ async function generateToken(id: string, res: Response) {
     expiresIn: "7d",
   });
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    maxAge: 15 * 60 * 1000,
-  });
+  // res.cookie("accessToken", accessToken, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "none",
+  //   maxAge: 15 * 60 * 1000,
+  // });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,

@@ -22,11 +22,12 @@ async function signUp(
     hashedPassword: password,
     email,
   });
-  await generateToken(user._id.toString(), res);
+  const { accessToken } = await generateToken(user._id.toString(), res);
 
   return res.status(201).json({
     success: true,
     message: "user created",
+    accessToken,
   });
 }
 
@@ -48,11 +49,12 @@ async function login(
 
   if (!isValidPassword) throw new APIError("Password incorrect", 400);
 
-  await generateToken(existingUser._id.toString(), res);
+  const { accessToken } = await generateToken(existingUser._id.toString(), res);
 
   return res.status(200).json({
     success: true,
     message: "Logged in",
+    accessToken,
   });
 }
 
