@@ -14,17 +14,13 @@ import { setAccessToken } from "../lib/accessToken";
 
 type Varient = "LOGIN" | "REGISTER";
 
-export default function AuthForm({
-  currentUser,
-}: {
-  currentUser: UserType | null;
-}) {
+export default function AuthForm() {
   const router = useRouter();
-  useEffect(() => {
-    if (currentUser) {
-      router.push("/users");
-    }
-  }, [currentUser, router]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     router.push("/users");
+  //   }
+  // }, [currentUser, router]);
   const [varient, setVarient] = useState<Varient>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
 

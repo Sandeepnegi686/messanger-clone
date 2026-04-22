@@ -1,6 +1,7 @@
+// import AuthHydrator from "./_context/AuthContext";
 import ToasterContext from "./_context/ToasterContext";
 import "./globals.css";
-import { initAuth } from "./lib/accessToken";
+// import { getServerAuth } from "./lib/auth-server";
 
 export const metadata = {
   title: "Messanger Clone",
@@ -12,11 +13,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await initAuth();
+  // const auth = await getServerAuth();
   return (
     <html lang="en" className={` h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <>
+          {/* {auth?.accessToken && <AuthHydrator accessToken={auth.accessToken} />} */}
           {children}
           <ToasterContext />
         </>

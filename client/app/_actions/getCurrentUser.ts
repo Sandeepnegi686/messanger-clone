@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import BASE_API_URL from "../lib/api";
 import { UserType } from "../_types/UserType";
 
 async function getCurrentUser(): Promise<UserType | null> {
@@ -8,11 +7,10 @@ async function getCurrentUser(): Promise<UserType | null> {
   let currentUser = null;
 
   if (token) {
-    const res = await fetch(`${BASE_API_URL}/api/v1/auth/me`, {
-      headers: {
-        Cookie: `accessToken=${token}`,
-      },
+    const res = await fetch("/api/user/getCurrentUser", {
+      method: "GET",
       cache: "no-store",
+      credentials: "include",
     });
     if (!res.ok) {
       return null;

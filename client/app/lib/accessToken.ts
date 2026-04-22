@@ -6,25 +6,18 @@ function setAccessToken(token: string) {
 
 const getAccessToken = () => accessToken;
 
-const initAuth = async () => {
-  try {
-    const res = await fetch("/api/refresh", {
-      method: "POST",
-      credentials: "include",
-    });
+async function refreshAccessToken() {
+  const res = await fetch("/api/auth/refresh", {
+    method: "POST",
+    credentials: "include",
+    cache: "no-store",
+  });
 
-    if (!res.ok) return false;
+  if (!res.ok) return null;
 
-    const data = await res.json();
-    if (data.success) {
-      setAccessToken(data.accessToken);
-      return true;
-    } else {
-      return false;
-    }
-  } catch {
-    return false;
-  }
-};
+  const data = await res.json();
+  setAccessToken(data.accessToken);
+  return data.accessToken as string;
+}
 
-export { setAccessToken, getAccessToken, initAuth };
+export { setAccessToken, getAccessToken, refreshAccessToken };

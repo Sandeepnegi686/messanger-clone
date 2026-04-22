@@ -5,7 +5,11 @@ import dotenv from "dotenv";
 import { login, signUp } from "../Controllers/auth.controller";
 import authenticateUser from "../middleware/authenticateUser";
 import { verifyCSRFToken } from "../middleware/csrfMiddleware";
-import { generateToken, refreshToken } from "../config/generateToken";
+import {
+  generateToken,
+  refreshToken,
+  verifyRefreshToken,
+} from "../config/generateToken";
 
 dotenv.config({ quiet: true });
 
@@ -50,5 +54,10 @@ router.get(
 );
 
 router.post("/auth/refresh-token", refreshToken);
+
+router.get("/auth/verify-refresh-token", (req: Request, res: Response) => {
+  const refreshToken = req.body.refreshToken;
+  const token = verifyRefreshToken;
+});
 
 export default router;

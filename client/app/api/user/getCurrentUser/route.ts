@@ -1,5 +1,6 @@
 import BASE_API_URL from "@/app/lib/api";
 import { cookies } from "next/headers";
+// import { apiFetch } from "@/app/lib/apiFetch";
 
 export async function GET() {
   const cookieStore = cookies();

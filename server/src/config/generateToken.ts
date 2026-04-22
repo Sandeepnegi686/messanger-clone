@@ -70,4 +70,4 @@ async function generateAccesssToken(_id: string) {
   return accessToken;
 }
 
-export { generateToken, refreshToken };
+export { generateToken, refreshToken, verifyRefreshToken };
