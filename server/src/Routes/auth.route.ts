@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { login, signUp } from "../Controllers/auth.controller";
 import authenticateUser from "../middleware/authenticateUser";
 import { verifyCSRFToken } from "../middleware/csrfMiddleware";
-import { generateToken } from "../config/generateToken";
+import { generateToken, refreshToken } from "../config/generateToken";
 
 dotenv.config({ quiet: true });
 
@@ -16,15 +16,6 @@ const router = express.Router();
 router.post("/auth/signup", signUp);
 
 router.post("/auth/login", login);
-
-router.get(
-  "/auth/me",
-  authenticateUser,
-  verifyCSRFToken,
-  (req: Request, res: Response) => {
-    return res.status(200).json({ success: true, user: req.user });
-  },
-);
 
 router.get(
   "/auth/google",
@@ -48,5 +39,16 @@ router.get(
     }
   },
 );
+
+router.get(
+  "/auth/me",
+  authenticateUser,
+  verifyCSRFToken,
+  (req: Request, res: Response) => {
+    return res.status(200).json({ success: true, user: req.user });
+  },
+);
+
+router.post("/auth/refresh-token", refreshToken);
 
 export default router;
