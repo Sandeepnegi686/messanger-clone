@@ -9,18 +9,21 @@ import { BsGoogle } from "react-icons/bs";
 import BASE_API_URL from "../lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { UserType } from "../_types/UserType";
 import { setAccessToken } from "../lib/accessToken";
+import { useAuth } from "../_context/AuthContext";
 
 type Varient = "LOGIN" | "REGISTER";
 
 export default function AuthForm() {
   const router = useRouter();
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     router.push("/users");
-  //   }
-  // }, [currentUser, router]);
+  const { accessToken } = useAuth();
+
+  useEffect(() => {
+    if (accessToken) {
+      router.replace("/users");
+    }
+  }, [accessToken, router]);
+
   const [varient, setVarient] = useState<Varient>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,8 +86,6 @@ export default function AuthForm() {
   async function googleLogin() {
     window.location.href = `${BASE_API_URL}/api/v1/auth/google`;
   }
-
-  useEffect(() => {}, []);
 
   return (
     <div className="mt-8 mx-auto w-[90%] md:w-full sm:max-w-md">

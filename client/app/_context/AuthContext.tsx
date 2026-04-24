@@ -1,16 +1,69 @@
 "use client";
 
-import { useEffect } from "react";
-import { setAccessToken } from "../lib/accessToken";
+import { useRouter } from "next/navigation";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 
-interface Props {
-  accessToken: string;
-}
+type AuthContextType = {
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
+  isLoading: boolean;
+};
 
-export default function AuthHydrator({ accessToken }: Props) {
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
   useEffect(() => {
-    setAccessToken(accessToken);
-  }, [accessToken]);
+    const initAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/refresh", {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+        });
 
-  return null;
-}
+        if (res.ok) {
+          const data = await res.json();
+          setAccessToken(data.accessToken);
+        } else {
+          router.push("/");
+          setAccessToken(null);
+        }
+      } catch (err) {
+        if (err instanceof Error) console.log(err.message);
+        setAccessToken(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initAuth();
+  }, [router]);
+
+  return (
+    <AuthContext.Provider value={{ accessToken, setAccessToken, isLoading }}>
+      {isLoading ? (
+        <div className="w-full h-full flex justify-center items-center">
+          <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-400" />
+        </div>
+      ) : (
+        children
+      )}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used inside AuthProvider");
+  return context;
+};
