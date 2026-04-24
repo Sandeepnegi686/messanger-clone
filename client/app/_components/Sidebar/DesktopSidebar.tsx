@@ -1,12 +1,35 @@
 "use client";
 
 import useRoutes from "@/app/_hooks/useRoutes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DesktopItem from "./DesktopItem";
+import { GetCurrentUser } from "@/app/_actions/getCurrentUser";
+import { getAccessToken } from "@/app/lib/accessToken";
 
 export default function DesktopSidebar() {
   const routes = useRoutes();
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+
+  // const currentUser = GetCurrentUser();
+  // console.log(currentUser);
+  const token = getAccessToken();
+
+  useEffect(function () {
+    async function getUser() {
+      const res = await fetch("/api/user/getCurrentUser", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `accessToken=${token}`,
+        },
+        cache: "no-store",
+      });
+      const data = await res.json();
+      console.log(data);
+    }
+    getUser();
+  }, []);
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-20 xl:px-6 lg:overflow-y-auto lg:bg-white lg:border-r lg:border-r-gray-200 lg:pb-4 lg:flex lg:flex-col justify-between">

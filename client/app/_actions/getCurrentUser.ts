@@ -1,25 +1,22 @@
-import { cookies } from "next/headers";
-import { UserType } from "../_types/UserType";
+import fetcher from "../lib/fetcher";
+import useSWR from "swr";
+import { getAccessToken } from "../lib/accessToken";
 
-async function getCurrentUser(): Promise<UserType | null> {
-  const cookieStore = cookies();
-  const token = (await cookieStore).get("accessToken")?.value;
-  let currentUser = null;
-
-  if (token) {
-    const res = await fetch("/api/user/getCurrentUser", {
-      method: "GET",
-      cache: "no-store",
-      credentials: "include",
-    });
-    if (!res.ok) {
-      return null;
-    }
-
-    const data = await res.json();
-    currentUser = data.user;
-  }
-  return currentUser;
+export function GetCurrentUser() {
+  const { data, error, isLoading, mutate } = useSWR(
+    ["/api/user/getCurrentUser", getAccessToken()],
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
+  );
+  console.log(data);
+  return {
+    currentUser: data ?? null,
+    isLoading,
+    error,
+    mutate,
+  };
 }
-
-export default getCurrentUser;

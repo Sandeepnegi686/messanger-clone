@@ -1,5 +1,6 @@
 import React from "react";
 import DesktopSidebar from "./DesktopSidebar";
+import MobileFooter from "./MobileFooter";
 
 export default async function Sidebar({
   children,
@@ -9,6 +10,7 @@ export default async function Sidebar({
   return (
     <div className="h-full">
       <DesktopSidebar />
+      <MobileFooter />
       <main className="lg:pl-20 h-full ">{children}</main>
     </div>
   );

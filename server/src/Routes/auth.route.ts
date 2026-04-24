@@ -47,7 +47,7 @@ router.get(
 router.get(
   "/auth/me",
   authenticateUser,
-  verifyCSRFToken,
+  // verifyCSRFToken,
   (req: Request, res: Response) => {
     return res.status(200).json({ success: true, user: req.user });
   },
