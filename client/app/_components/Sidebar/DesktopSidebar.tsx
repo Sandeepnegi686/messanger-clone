@@ -5,23 +5,20 @@ import { useEffect, useState } from "react";
 import DesktopItem from "./DesktopItem";
 import { GetCurrentUser } from "@/app/_actions/getCurrentUser";
 import { getAccessToken } from "@/app/lib/accessToken";
+import {apiFetch} from "@/app/lib/apiFetch"
+import { useAuth } from "@/app/_context/AuthContext"
 
 export default function DesktopSidebar() {
   const routes = useRoutes();
-  // const [isOpen, setIsOpen] = useState(false);
-
-  // const currentUser = GetCurrentUser();
-  // console.log(currentUser);
-  const token = getAccessToken();
-
+  const {accessToken} = useAuth();
+  
   useEffect(function () {
     async function getUser() {
       const res = await fetch("/api/user/getCurrentUser", {
         method: "GET",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
-          Cookie: `accessToken=${token}`,
+          "Authorization": `Bearer ${accessToken}`,
         },
         cache: "no-store",
       });

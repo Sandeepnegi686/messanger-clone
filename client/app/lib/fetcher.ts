@@ -2,9 +2,8 @@ async function fetcher(url: string, accessToken: string) {
   const res = await fetch(url, {
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+       Cookie: `accessToken=${accessToken}`,
     },
-    body: JSON.stringify({ accessToken }),
     cache: "no-store",
   });
   if (!res.ok) {

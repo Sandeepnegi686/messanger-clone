@@ -1,17 +1,9 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import client from "../config/redis.config";
 import UserModel, { UserType } from "../Models/user.model";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User | undefined;
-    }
-  }
-}
 
 type AuthTokenPayload = JwtPayload & {
   _id: string;
@@ -23,29 +15,57 @@ async function authenticateUser(
   next: NextFunction,
 ) {
   try {
-    const authHeader = req?.cookies?.["accessToken"];
-    if (!authHeader) {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
-        message: "Authentication Header not present.",
+        message: "No token provided",
       });
     }
-    const token = authHeader;
-    const payload = jwt.verify(token, JWT_SECRET) as AuthTokenPayload;
+
+    const token = authHeader.split(" ")[1];
+    // console.log(token)
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    if (typeof decoded === "string" || !decoded._id) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token payload",
+      });
+    }
+
+    const payload = decoded as AuthTokenPayload;
+
+    // 🔥 Redis Cache
     const cachedUser = await client.get(`user:${payload._id}`);
+
     if (cachedUser) {
       req.user = JSON.parse(cachedUser) as UserType;
       return next();
     }
+
     const user = await UserModel.findById(payload._id).lean();
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     await client.set(`user:${payload._id}`, JSON.stringify(user), {
       expiration: { type: "EX", value: 60 * 60 },
     });
-    req.user = user ? (user as UserType) : undefined;
+
+    req.user = user as UserType;
+
     next();
   } catch (error) {
     console.log(error);
-    return res.status(401).json({ success: false, message: "unauthorized" });
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized",
+    });
   }
 }
 
