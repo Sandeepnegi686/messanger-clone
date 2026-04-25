@@ -1,16 +1,21 @@
-async function fetcher(url: string, accessToken: string) {
+const fetcher = async ([url, token]: [string, string | null]) => {
+  if (!token) return null;
+
   const res = await fetch(url, {
-    credentials: "include",
+    method: "GET",
     headers: {
-       Cookie: `accessToken=${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
+    credentials: "include",
     cache: "no-store",
   });
+
   if (!res.ok) {
-    throw new Error("Something went wrong");
+    const error = await res.json();
+    throw error;
   }
-  const data = await res.json();
-  return data;
-}
+
+  return res.json();
+};
 
 export default fetcher;

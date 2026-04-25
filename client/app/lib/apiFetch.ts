@@ -1,11 +1,6 @@
 import { setAccessToken } from "./accessToken";
 
-import { useAuth } from "@/app/_context/AuthContext"
-
 export const apiFetch = async (url: string, options: RequestInit = {}) => {
-
-  // const =useAuth();
-
   const res = await fetch(url, {
     ...options,
     headers: {
@@ -37,7 +32,7 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     } else {
       // logout user
       setAccessToken("");
-      window.location.href = "/login";
+      window.location.href = "/";
     }
   }
 

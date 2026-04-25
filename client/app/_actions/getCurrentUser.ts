@@ -1,12 +1,12 @@
-import fetcher from "../lib/fetcher";
 import useSWR from "swr";
-import { getAccessToken } from "../lib/accessToken";
-// import { useAuth } from "@/app/_context/AuthContext"
+import { useAuth } from "../_context/AuthContext";
+import fetcher from "../lib/fetcher";
 
 export function GetCurrentUser() {
-  // const {accessToken} = useAuth();
+  const { accessToken } = useAuth();
+
   const { data, error, isLoading, mutate } = useSWR(
-    ["/api/user/getCurrentUser", getAccessToken()],
+    accessToken ? ["/api/user/getCurrentUser", accessToken] : null, // 🔥 important
     fetcher,
     {
       revalidateIfStale: false,
@@ -14,7 +14,7 @@ export function GetCurrentUser() {
       revalidateOnReconnect: false,
     },
   );
-  // console.log(data);
+
   return {
     currentUser: data ?? null,
     isLoading,
