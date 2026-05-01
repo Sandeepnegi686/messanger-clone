@@ -59,7 +59,7 @@ async function verifyCSRFToken(
   } catch (error) {
     console.log(error);
     console.log("CSRF_VERIFICATION_ERROR");
-    return res.status(401).json({
+    return res.status(403).json({
       success: false,
       mussage:
         error instanceof Error

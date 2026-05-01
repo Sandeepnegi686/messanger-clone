@@ -16,7 +16,7 @@ export function GetCurrentUser() {
   );
 
   return {
-    currentUser: data ?? null,
+    currentUser: data?.user ?? null,
     isLoading,
     error,
     mutate,

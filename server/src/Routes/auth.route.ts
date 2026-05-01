@@ -2,9 +2,14 @@ import express, { Request, Response } from "express";
 import passport from "passport";
 import dotenv from "dotenv";
 
-import { login, signUp } from "../Controllers/auth.controller";
+import { login, logout, signUp } from "../Controllers/auth.controller";
 import authenticateUser from "../middleware/authenticateUser";
-import { verifyCSRFToken } from "../middleware/csrfMiddleware";
+import {
+  generateCSRFToken,
+  refreshCSRFToken,
+  revokecsrfToken,
+  verifyCSRFToken,
+} from "../middleware/csrfMiddleware";
 import {
   generateToken,
   refreshToken,
@@ -59,5 +64,9 @@ router.get("/auth/verify-refresh-token", (req: Request, res: Response) => {
   const refreshToken = req.body.refreshToken;
   const token = verifyRefreshToken;
 });
+
+router.post("/auth/logout", authenticateUser, verifyCSRFToken, logout);
+
+router.get("/get-new-csrf-token", authenticateUser, refreshCSRFToken);
 
 export default router;

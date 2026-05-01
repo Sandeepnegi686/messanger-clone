@@ -3,6 +3,8 @@ import { loginValidation, validateRegister } from "../lib/validate";
 import UserModel from "../Models/user.model";
 import { generateToken } from "../config/generateToken";
 import { APIError } from "../middleware/errorHandler";
+import client from "../config/redis.config";
+import { revokecsrfToken } from "../middleware/csrfMiddleware";
 
 async function signUp(
   req: Request<{}, {}, { name: string; email: string; password: string }, {}>,
@@ -58,4 +60,14 @@ async function login(
   });
 }
 
-export { signUp, login };
+async function logout(req: Request, res: Response) {
+  await revokecsrfToken((req.user as any)._id);
+  res.clearCookie("refreshToken");
+  res.clearCookie("csrfToken");
+  await client.del(`user:${(req.user as any)._id}`);
+  return res
+    .status(200)
+    .json({ success: true, message: "Logout successfully" });
+}
+
+export { signUp, login, logout };

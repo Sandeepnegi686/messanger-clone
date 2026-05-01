@@ -27,7 +27,7 @@ const useRoutes = () => {
       {
         label: "Logout",
         href: "#",
-        onClic: () => {},
+        onClick: () => {},
         icon: HiArrowLeftOnRectangle,
       },
     ],
