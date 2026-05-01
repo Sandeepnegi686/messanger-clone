@@ -6,7 +6,7 @@ export function GetCurrentUser() {
   const { accessToken } = useAuth();
 
   const { data, error, isLoading, mutate } = useSWR(
-    accessToken ? ["/api/user/getCurrentUser", accessToken] : null, // 🔥 important
+    accessToken ? ["/api/user/getCurrentUser", accessToken] : null,
     fetcher,
     {
       revalidateIfStale: false,

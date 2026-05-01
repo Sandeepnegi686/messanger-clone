@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const res = await fetch("/api/auth/refresh", {
           method: "POST",
