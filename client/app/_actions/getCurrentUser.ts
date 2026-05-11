@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useAuth } from "../_context/AuthContext";
 import fetcher from "../lib/fetcher";
+import { UserType } from "../_types/UserType";
 
 export function GetCurrentUser() {
   const { accessToken } = useAuth();
@@ -16,7 +17,7 @@ export function GetCurrentUser() {
   );
 
   return {
-    currentUser: data?.user ?? null,
+    currentUser: (data?.user as UserType) ?? null,
     isLoading,
     error,
     mutate,

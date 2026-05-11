@@ -9,14 +9,13 @@ import { BsGoogle } from "react-icons/bs";
 import BASE_API_URL from "../lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { setAccessToken } from "../lib/accessToken";
 import { useAuth } from "../_context/AuthContext";
 
 type Varient = "LOGIN" | "REGISTER";
 
 export default function AuthForm() {
   const router = useRouter();
-  const { accessToken } = useAuth();
+  const { accessToken, setAccessToken } = useAuth();
 
   useEffect(() => {
     if (accessToken) {

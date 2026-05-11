@@ -7,12 +7,14 @@ import {
   useEffect,
   useState,
   ReactNode,
+  useCallback,
 } from "react";
 
 type AuthContextType = {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
   isLoading: boolean;
+  apiFetch: (url: string, options?: RequestInit) => Promise<Response>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -50,8 +52,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     initAuth();
   }, [router]);
 
+  const apiFetch = useCallback(
+    async (url: string, options: RequestInit = {}) => {
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+        },
+        credentials: "include", // IMPORTANT for cookies
+      });
+
+      if (res.status === 401) {
+        // try refreshing token
+        const refreshRes = await fetch("/api/auth/refresh", {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+        });
+
+        if (refreshRes.ok) {
+          const data = await refreshRes.json();
+          setAccessToken(data.accessToken);
+
+          // retry original request
+          return fetch(url, {
+            ...options,
+            headers: {
+              ...options.headers,
+            },
+            credentials: "include",
+          });
+        } else {
+          // logout user
+          setAccessToken("");
+          window.location.href = "/";
+        }
+      }
+
+      return res;
+    },
+    [],
+  );
+
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, isLoading }}>
+    <AuthContext.Provider
+      value={{ accessToken, setAccessToken, isLoading, apiFetch }}
+    >
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-400" />

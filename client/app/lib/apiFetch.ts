@@ -1,4 +1,4 @@
-import { setAccessToken } from "./accessToken";
+// import { setAccessToken } from "./accessToken";
 
 export const apiFetch = async (url: string, options: RequestInit = {}) => {
   const res = await fetch(url, {

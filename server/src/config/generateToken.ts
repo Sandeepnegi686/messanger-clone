@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { generateCSRFToken } from "../middleware/csrfMiddleware";
+// import { generateCSRFToken } from "../middleware/csrfMiddleware";
 import client from "./redis.config";
 import { APIError } from "../middleware/errorHandler";
 
@@ -26,7 +26,7 @@ async function generateToken(id: string, res: Response) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  await generateCSRFToken(id, res);
+  // await generateCSRFToken(id, res);
 
   return { accessToken, refreshToken };
 }
@@ -39,7 +39,7 @@ async function refreshToken(req: Request, res: Response) {
 
   if (!decoded) {
     res.clearCookie("refreshToken");
-    res.clearCookie("csrfToken");
+    // res.clearCookie("csrfToken");
     return res
       .status(401)
       .json({ success: false, message: "Invalid Refresh Token" });

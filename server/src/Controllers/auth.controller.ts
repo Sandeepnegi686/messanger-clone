@@ -4,7 +4,7 @@ import UserModel from "../Models/user.model";
 import { generateToken } from "../config/generateToken";
 import { APIError } from "../middleware/errorHandler";
 import client from "../config/redis.config";
-import { revokecsrfToken } from "../middleware/csrfMiddleware";
+// import { revokecsrfToken } from "../middleware/csrfMiddleware";
 
 async function signUp(
   req: Request<{}, {}, { name: string; email: string; password: string }, {}>,
@@ -61,9 +61,10 @@ async function login(
 }
 
 async function logout(req: Request, res: Response) {
-  await revokecsrfToken((req.user as any)._id);
+  // await revokecsrfToken((req.user as any)._id);
   res.clearCookie("refreshToken");
-  res.clearCookie("csrfToken");
+  res.clearCookie("accessToken");
+  // res.clearCookie("csrfToken");
   await client.del(`user:${(req.user as any)._id}`);
   return res
     .status(200)
