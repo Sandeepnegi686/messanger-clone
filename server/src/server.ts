@@ -2,20 +2,14 @@ import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
-
-// import connectDB from "./config/connectDB.ts";
 import connectDB from "./config/connectDB";
 import authRouter from "./Routes/auth.route";
+import userRouter from "./Routes/user.route";
+import conversationRouter from "./Routes/conversation.route";
 import { errorHandler } from "./middleware/errorHandler";
-// import authRoute from "./Routes/auth";
-// import userRoute from "./Routes/user";
-// import listRoute from "./Routes/listing";
-// import { errorHandler } from "./middleware/errorHandler";
-// import reservationRoute from "./Routes/reservation";
 require("dotenv").config();
-// import passport from "./Config/passport";
-// import authenticateUser from "./middleware/authMiddleware";
 import passport from "./config/passport";
+import authenticateUser from "./middleware/authenticateUser";
 
 const PORT = process.env.PORT || 80;
 const DB_URL = process.env.DB_URL || "";
@@ -33,12 +27,11 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
+app.get("/", (_: Request, res: Response) => res.send("Hello from Ts - node"));
 
 app.use("/api/v1", authRouter);
-// app.use("/api/v1/user", userRoute);
-// app.use("/api/v1/listing", listRoute);
-// app.use("/api/v1/reservation", authenticateUser, reservationRoute);
+app.use("/api/v1/user", authenticateUser, userRouter);
+app.use("/api/v1/conversation", authenticateUser, conversationRouter);
 
 app.use(errorHandler);
 

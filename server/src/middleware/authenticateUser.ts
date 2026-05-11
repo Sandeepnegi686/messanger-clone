@@ -22,7 +22,7 @@ async function authenticateUser(
         message: "No token provided",
       });
     }
-
+    console.log(authHeader);
     const token = authHeader.split(" ")[1];
     // console.log(token)
     const decoded = jwt.verify(token, JWT_SECRET);

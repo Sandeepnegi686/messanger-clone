@@ -58,11 +58,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ...options,
         headers: {
           ...options.headers,
+          authorization: `Bearer ${accessToken}`,
         },
         credentials: "include", // IMPORTANT for cookies
       });
 
       if (res.status === 401) {
+        console.log("code run ");
         // try refreshing token
         const refreshRes = await fetch("/api/auth/refresh", {
           method: "POST",
@@ -91,7 +93,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return res;
     },
-    [],
+    [accessToken],
   );
 
   return (

@@ -5,13 +5,13 @@ import DesktopItem from "./DesktopItem";
 import { GetCurrentUser } from "@/app/_actions/getCurrentUser";
 import { useState } from "react";
 import Avatar from "../Avatar";
+import { GetUsers } from "@/app/_actions/getUsers";
 
 export default function DesktopSidebar() {
   const routes = useRoutes();
 
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = GetCurrentUser();
-  console.log(currentUser);
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-20 xl:px-6 lg:overflow-y-auto lg:bg-white lg:border-r lg:border-r-gray-200 lg:pb-4 lg:flex lg:flex-col justify-between">

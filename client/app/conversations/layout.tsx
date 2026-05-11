@@ -1,8 +1,7 @@
-import React from "react";
 import Sidebar from "../_components/Sidebar/Sidebar";
-import UserList from "../_components/UserList";
+import ConversationList from "./components/ConversationList";
 
-export default async function UserLayout({
+export default async function layout({
   children,
 }: {
   children: React.ReactNode;
@@ -10,7 +9,7 @@ export default async function UserLayout({
   return (
     <Sidebar>
       <div className="h-full">
-        <UserList />
+        <ConversationList intialItems={[]} />
         {children}
       </div>
     </Sidebar>

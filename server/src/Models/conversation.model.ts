@@ -32,7 +32,7 @@ const schema = new Schema(
   { timestamps: true },
 );
 
-schema.index({ participants: 1 });
+schema.index({ participants: 1, isGroup: 1 });
 
 const ConversationModel = model("Conversation", schema);
 
