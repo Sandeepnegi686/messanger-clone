@@ -47,12 +47,15 @@ export async function GET(req: Request) {
     );
   }
 
-  const response = await fetch(`${BASE_API_URL}/api/v1/auth/me`, {
-    cache: "no-store",
-    headers: {
-      Authorization: authHeader,
+  const response = await fetch(
+    `${BASE_API_URL}/api/v1/conversation/getConversations`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: authHeader,
+      },
     },
-  });
+  );
 
   const data = await response.json();
   return Response.json(data, { status: response.status });

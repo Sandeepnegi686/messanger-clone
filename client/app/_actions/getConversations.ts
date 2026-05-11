@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import { useAuth } from "../_context/AuthContext";
 import fetcher from "../lib/fetcher";
-import { UserType } from "../_types/UserType";
 
 export function GetConversations() {
   const { accessToken } = useAuth();
@@ -17,7 +16,7 @@ export function GetConversations() {
   );
 
   return {
-    currentUser: data?.conversations ?? [],
+    conversations: data?.conversations ?? [],
     isLoading,
     error,
     mutate,

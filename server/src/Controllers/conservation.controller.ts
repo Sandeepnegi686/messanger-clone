@@ -6,7 +6,7 @@ import { APIError } from "../middleware/errorHandler";
 import client from "../config/redis.config";
 import ConversationModel from "../Models/conversation.model";
 
-async function createConservation(
+async function createConversation(
   req: Request<
     {},
     {},
@@ -82,4 +82,23 @@ async function createConservation(
   });
 }
 
-export { createConservation };
+async function getConversations(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const userId = (req.user as any)._id;
+  const conversations = await ConservationModel.find({
+    participants: userId,
+  })
+    .populate("participants", "name email image")
+    .populate("lastMessage")
+    .sort({ createdAt: -1 });
+
+  return res.status(200).json({
+    success: true,
+    conversations,
+  });
+}
+
+export { createConversation, getConversations };

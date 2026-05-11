@@ -1,8 +1,13 @@
 import express from "express";
-import { createConservation } from "../Controllers/conservation.controller";
+import {
+  createConversation,
+  getConversations,
+} from "../Controllers/conservation.controller";
 
 const router = express.Router();
 
-router.post("/createConversation", createConservation);
+router.post("/createConversation", createConversation);
+
+router.get("/getConversations", getConversations);
 
 export default router;
