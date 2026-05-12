@@ -22,7 +22,7 @@ async function authenticateUser(
         message: "No token provided",
       });
     }
-    console.log(authHeader);
+    // console.log(authHeader);
     const token = authHeader.split(" ")[1];
     // console.log(token)
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -36,7 +36,7 @@ async function authenticateUser(
 
     const payload = decoded as AuthTokenPayload;
 
-    // 🔥 Redis Cache
+    // Redis Cache
     const cachedUser = await client.get(`user:${payload._id}`);
 
     if (cachedUser) {
